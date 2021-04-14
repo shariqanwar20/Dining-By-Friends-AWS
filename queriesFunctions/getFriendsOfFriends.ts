@@ -8,15 +8,12 @@ const t = gremlin.process.t
 
 const uri = process.env.READER
 
-export async function getFriends(userId: string) {
+export async function getFriendsOfFriends(userId: string) {
     let dc = new DriverRemoteConnection(`wss://${uri}/gremlin`, {})
     const graph = new Graph()
     const g = graph.traversal().withRemote(dc)
 
-    const data = await g.V().has("person", "id", userId).out("friends").toList()
-
-    console.log("Friends list: ", data);
-
+    const data = await g.V().has("id", userId).times(2).repeat(__.out("friends")).toList()
     let friends = Array()
 
     let v: any;

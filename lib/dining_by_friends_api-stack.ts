@@ -110,6 +110,20 @@ export class DiningByFriendsApiStack extends cdk.Stack {
       responseMappingTemplate: appsync.MappingTemplate.fromFile("vtl/addFriend/response.vtl")
     })
 
+    httpDataSource.createResolver({
+      typeName: "Mutation",
+      fieldName: "addReview",
+      requestMappingTemplate: appsync.MappingTemplate.fromFile("vtl/addReview/request.vtl"),
+      responseMappingTemplate: appsync.MappingTemplate.fromFile("vtl/addReview/response.vtl")
+    })
+
+    httpDataSource.createResolver({
+      typeName: "Mutation",
+      fieldName: "rateReview",
+      requestMappingTemplate: appsync.MappingTemplate.fromFile("vtl/rateReview/request.vtl"),
+      responseMappingTemplate: appsync.MappingTemplate.fromFile("vtl/rateReview/response.vtl")
+    })
+
     queryLambdaDataSource.createResolver({
       typeName: "Query",
       fieldName: "getUsers"
@@ -118,6 +132,21 @@ export class DiningByFriendsApiStack extends cdk.Stack {
     queryLambdaDataSource.createResolver({
       typeName: "Query",
       fieldName: "getFriends"
+    })
+
+    queryLambdaDataSource.createResolver({
+      typeName: "Query",
+      fieldName: "getFriendsOfFriends"
+    })
+
+    queryLambdaDataSource.createResolver({
+      typeName: "Query",
+      fieldName: "getRelationWithUser"
+    })
+
+    queryLambdaDataSource.createResolver({
+      typeName: "Query",
+      fieldName: "getHighestRatedResturantWithCuisine"
     })
 
     const rule = new events.Rule(this, "DiningByFriendsMutationRule", {

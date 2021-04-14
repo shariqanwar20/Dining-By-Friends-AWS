@@ -14,3 +14,17 @@ export type Friend = {
   userId: string;
   friendId: string;
 }
+
+export type Review = {
+  userId: string;
+  text: string;
+  rating: string;
+  restaurantId: string;
+  cuisineId: string;
+}
+
+export type RateReview = {
+  userId: string;
+  like: boolean;
+  reviewId: string;
+}

@@ -1,6 +1,8 @@
 import { addFriend } from "./addFriend";
 import { addRestaurant } from "./addRestaurant";
+import { addReview } from "./addReview";
 import { addUser } from "./addUser";
+import { rateReview } from "./rateReview";
 
 
 exports.handler = async (event:any) => {
@@ -12,6 +14,10 @@ exports.handler = async (event:any) => {
         return await addRestaurant(event.detail)
       case "appsync-add-friend": 
         return await addFriend(event.detail)
+      case "appsync-add-review": 
+        return await addReview(event.detail)
+      case "appsync-rate-review": 
+        return await rateReview(event.detail)
       default:
         return null;
     }

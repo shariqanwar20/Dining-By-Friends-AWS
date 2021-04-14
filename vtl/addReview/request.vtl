@@ -1,0 +1,21 @@
+{
+    "version": "2018-05-29",
+    "method": "POST",
+    "resourcePath": "/",
+    "params": {
+        "headers": {
+        "content-type": "application/x-amz-json-1.1",
+        "x-amz-target":"AWSEvents.PutEvents"
+        },
+        "body": {
+            "Entries": [
+                {
+                    "Source": "appsync-add-review",
+                    "EventBusName": "default",
+                    "Detail": "{ \"userId\" : \"$ctx.arguments.review.userId\", \"text\" : \"$ctx.arguments.review.text\", \"rating\" : \"$ctx.arguments.review.rating\", \"restaurantId\" : \"$ctx.arguments.review.restaurantId\", \"cuisineId\" : \"$ctx.arguments.review.cuisineId\"}",
+                    "DetailType": "add bookmark via graphql"
+                }
+            ]
+        }
+    }
+}

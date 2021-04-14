@@ -8,6 +8,14 @@ type Restaurant {
   name: String!
 }
 
+type Review {
+  id: ID!
+  text: String!
+  rating: String!
+  timeStamp: String!
+  helpfulnessRating: String!
+}
+
 input PersonInput {
   userId: String!
   name: String!
@@ -25,13 +33,33 @@ input FriendInput {
   friendId: String
 }
 
+input ReviewInput {
+  userId: String!
+  text: String!
+  rating: String!
+  restaurantId: String!
+  cuisineId: String!
+}
+
+input RateReviewInput {
+  userId: String!
+  like: Boolean!
+  reviewId: String!
+}
+
 type Query {
   getUsers: [Person]
   getFriends(userId: String!) : [Person]
+  getFriendsOfFriends(userId: String!) : [Person]
+  getRelationWithUser(userId: String!, otherUserId: String!) : String
+  getHighestRatedResturantWithCuisine(userId: String!, cuisineName: String!) : Restaurant
+  getTopTenRestaurantsNearMe(userId: String!) : [Restaurant]
 }
 
 type Mutation {
   addUser(person: PersonInput!): Person
   addRestaurant(restaurant: RestaurantInput!) : Restaurant
   addFriend(friend: FriendInput!) : String
+  addReview(review: ReviewInput!) : Review
+  rateReview(ratereview: RateReviewInput!) : String
 }

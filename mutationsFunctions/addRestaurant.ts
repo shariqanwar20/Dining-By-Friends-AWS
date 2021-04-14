@@ -15,7 +15,7 @@ export async function addRestaurant(restaurantInfo: Restaurant) {
     const g = graph.traversal().withRemote(dc)
 
     const  restaurantVertex = g.V().has("restaurant", "name", restaurantInfo.name)
-    const restaurant = await restaurantVertex.hasNext() ? await restaurantVertex.next() :  await g.addV('restaurant').property('name', restaurantInfo.name).property("rating", 0.0).next()
+    const restaurant = await restaurantVertex.hasNext() ? await restaurantVertex.next() :  await g.addV('restaurant').property('name', restaurantInfo.name).property("rating", 0).next()
 
     console.log("Restaurant vertex: ", restaurant);
 
