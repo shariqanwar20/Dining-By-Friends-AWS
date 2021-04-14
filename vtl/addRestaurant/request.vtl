@@ -10,10 +10,10 @@
         "body": {
             "Entries": [
                 {
-                    "Source": "appsync-add-user",
+                    "Source": "appsync-add-restaurant",
                     "EventBusName": "default",
-                    "Detail": "{ \"userId\" : \"$ctx.arguments.person.userId\", \"name\" : \"$ctx.arguments.person.name\", \"location\" : \"$ctx.arguments.person.location\" }",
-                    "DetailType": "add user via graphql"
+                    "Detail": "{ \"name\" : \"$ctx.arguments.restaurant.name\", \"location\" : \"$ctx.arguments.restaurant.location\", \"cuisine\" : \"$ctx.arguments.restaurant.cuisine\"}",
+                    "DetailType": "add bookmark via graphql"
                 }
             ]
         }

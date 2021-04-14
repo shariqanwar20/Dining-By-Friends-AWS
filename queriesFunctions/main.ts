@@ -1,4 +1,5 @@
-import listPosts from "./getUsers";
+import { getFriends } from "./getFriends";
+import { getUsers } from "./getUsers";
 
 type AppSyncEvent = {
     info: {
@@ -12,8 +13,10 @@ type AppSyncEvent = {
 exports.handler = async (event: AppSyncEvent) => {
     console.log("Arguments in queries lambda: ", event.arguments);
     switch (event.info.fieldName) {
-      case "listPosts": 
-        return await listPosts();
+      case "getUsers": 
+        return await getUsers();
+      case "getFriends":
+        return await getFriends(event.arguments.userId)
       default:
         return null;
     }

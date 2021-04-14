@@ -89,14 +89,35 @@ export class DiningByFriendsApiStack extends cdk.Stack {
 
     httpDataSource.createResolver({
       typeName: "Mutation",
-      fieldName: "createPost",
+      fieldName: "addUser",
       requestMappingTemplate: appsync.MappingTemplate.fromFile("vtl/addUser/request.vtl"),
       responseMappingTemplate: appsync.MappingTemplate.fromFile("vtl/addUser/response.vtl")
     })
 
+    
+    httpDataSource.createResolver({
+      typeName: "Mutation",
+      fieldName: "addRestaurant",
+      requestMappingTemplate: appsync.MappingTemplate.fromFile("vtl/addRestaurant/request.vtl"),
+      responseMappingTemplate: appsync.MappingTemplate.fromFile("vtl/addRestaurant/response.vtl")
+    })
+
+    
+    httpDataSource.createResolver({
+      typeName: "Mutation",
+      fieldName: "addFriend",
+      requestMappingTemplate: appsync.MappingTemplate.fromFile("vtl/addFriend/request.vtl"),
+      responseMappingTemplate: appsync.MappingTemplate.fromFile("vtl/addFriend/response.vtl")
+    })
+
     queryLambdaDataSource.createResolver({
       typeName: "Query",
-      fieldName: "listPosts"
+      fieldName: "getUsers"
+    })
+
+    queryLambdaDataSource.createResolver({
+      typeName: "Query",
+      fieldName: "getFriends"
     })
 
     const rule = new events.Rule(this, "DiningByFriendsMutationRule", {

@@ -5,7 +5,7 @@
 #if ($ctx.result.statusCode == 200)
     {
         "id" : "$util.parseJson($ctx.result.body)",
-        "name" : "$util.parseJson($ctx.result.body)",
+        "name" : "$util.parseJson($ctx.result.body)"
     }
 #else
     $util.appendError($ctx.result.body, $ctx.result.statusCode)

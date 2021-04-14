@@ -1,18 +1,37 @@
-type Post {
+type Person {
   id: ID!
-  title: String!
-  content: String!
+  name: String!
 }
 
-input PostInput {
-  title: String!
-  content: String!
+type Restaurant {
+  id: ID!
+  name: String!
+}
+
+input PersonInput {
+  userId: String!
+  name: String!
+  location: String!
+}
+
+input RestaurantInput {
+  name: String!
+  location: String!
+  cuisine: String!
+}
+
+input FriendInput { 
+  userId: String!
+  friendId: String
 }
 
 type Query {
-  listPosts: [Post]
+  getUsers: [Person]
+  getFriends(userId: String!) : [Person]
 }
 
 type Mutation {
-  createPost(post: PostInput!): Post
+  addUser(person: PersonInput!): Person
+  addRestaurant(restaurant: RestaurantInput!) : Restaurant
+  addFriend(friend: FriendInput!) : String
 }

@@ -10,10 +10,10 @@
         "body": {
             "Entries": [
                 {
-                    "Source": "appsync-add-user",
+                    "Source": "appsync-add-friend",
                     "EventBusName": "default",
-                    "Detail": "{ \"userId\" : \"$ctx.arguments.person.userId\", \"name\" : \"$ctx.arguments.person.name\", \"location\" : \"$ctx.arguments.person.location\" }",
-                    "DetailType": "add user via graphql"
+                    "Detail": "{ \"userId\" : \"$ctx.arguments.friend.userId\", \"friendId\" : \"$ctx.arguments.friend.friendId\"}",
+                    "DetailType": "add bookmark via graphql"
                 }
             ]
         }
