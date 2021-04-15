@@ -14,7 +14,7 @@ export async function addFriend(friend: Friend) {
     const graph = new Graph()
     const g = graph.traversal().withRemote(dc)
 
-    const userToOtherUser = await g.V().has("person", "id", friend.userId).as("r").V().has("person", "id", friend.friendId).coalesce(__.inE("friends").where(__.outV().as("r")), __.addE("friends").from_("r")).next()
+    const userToOtherUser = await g.V(friend.userId).as("r").V(friend.friendId).coalesce(__.inE("friends").where(__.outV().as("r")), __.addE("friends").from_("r")).next()
     
     console.log("friend edge: ", userToOtherUser);
     

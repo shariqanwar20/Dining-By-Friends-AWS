@@ -25,34 +25,44 @@ export class DiningByFriendsApiStack extends cdk.Stack {
       }
     })
 
-    const vpc =  new ec2.Vpc(this, "NeptuneVpc")
+    const vpc =  new ec2.Vpc(this, "NeptuneVpc", {
+      subnetConfiguration: [
+        {
+          cidrMask: 24,
+          subnetType: ec2.SubnetType.ISOLATED,
+          name: "Ingress"
+        }
+      ]
+    })
 
-    // const sg1 = new ec2.SecurityGroup(this, "mySecurityGroup1", {
-    //   vpc,
-    //   allowAllOutbound: true,
-    //   description: "security group 1",
-    //   securityGroupName: "mySecurityGroup",
-    // });
-    // cdk.Tags.of(sg1).add("Name", "mySecurityGroup");
+    const sg1 = new ec2.SecurityGroup(this, "mySecurityGroup1", {
+      vpc,
+      allowAllOutbound: true,
+      description: "security group 1",
+      securityGroupName: "mySecurityGroup",
+    });
+    cdk.Tags.of(sg1).add("Name", "mySecurityGroup");
 
-    // sg1.addIngressRule(sg1, ec2.Port.tcp(8182), "MyRule");
+    sg1.addIngressRule(sg1, ec2.Port.tcp(8182), "MyRule");
 
-    // const neptuneSubnet = new neptune.SubnetGroup(
-    //   this,
-    //   "neptuneSubnetGroup",
-    //   {
-    //     subnetGroupName: "neptuneSubnet",
-    //     vpc,
-    //     vpcSubnets: vpc.selectSubnets({ subnetType: ec2.SubnetType.ISOLATED })
-    //   }
-    // );
+    const neptuneSubnet = new neptune.SubnetGroup(
+      this,
+      "neptuneSubnetGroup",
+      {
+        subnetGroupName: "neptuneSubnet",
+        vpc,
+        vpcSubnets: vpc.selectSubnets({ subnetType: ec2.SubnetType.ISOLATED })
+      }
+    );
 
     const neptuneCluster = new neptune.DatabaseCluster(this, "DIningByFriendsCLuster", {
       vpc,
-      instanceType: neptune.InstanceType.T3_MEDIUM
+      instanceType: neptune.InstanceType.T3_MEDIUM,
+      vpcSubnets: vpc.selectSubnets({ subnetType: ec2.SubnetType.ISOLATED }),
+      securityGroups: [sg1]
     })
 
-    neptuneCluster.connections.allowDefaultPortFromAnyIpv4("Open to world")
+    neptuneCluster.connections.addSecurityGroup(sg1)
   
     const writeAddress = neptuneCluster.clusterEndpoint.socketAddress
     const readAddress = neptuneCluster.clusterReadEndpoint.socketAddress
@@ -62,13 +72,23 @@ export class DiningByFriendsApiStack extends cdk.Stack {
       code: new lambda.AssetCode("mutationsFunctions"),
       handler: "main.handler",
       vpc: vpc,
+      securityGroups: [sg1],
+      vpcSubnets:
+      {
+        subnetType: ec2.SubnetType.ISOLATED                                                                                                               
+      }
     });
 
     const neptuneQueriesLambda = new lambda.Function(this, "NeptuneQueryLambdas", { 
       runtime: lambda.Runtime.NODEJS_14_X,
       code: new lambda.AssetCode("queriesFunctions"),
       handler: "main.handler",
-      vpc: vpc
+      vpc: vpc,
+      securityGroups: [sg1],
+      vpcSubnets:
+      {
+        subnetType: ec2.SubnetType.ISOLATED                                                                                                               
+      }
     });
 
     neptuneMutationLambda.addEnvironment('WRITER', writeAddress)
@@ -77,10 +97,10 @@ export class DiningByFriendsApiStack extends cdk.Stack {
     const httpDataSource = api.addHttpDataSource("NeptuneHttpDataSource", `https://events.${this.region}.amazonaws.com/`, {
       name: "NeptuneHttpDataSource",
       description: "Appsync To EventBridge to lambda to neptune",
-    authorizationConfig: {
-      signingRegion: this.region,
-      signingServiceName: "events"
-    }
+      authorizationConfig: {
+        signingRegion: this.region,
+        signingServiceName: "events"
+      }
     })
     events.EventBus.grantAllPutEvents(httpDataSource);
 

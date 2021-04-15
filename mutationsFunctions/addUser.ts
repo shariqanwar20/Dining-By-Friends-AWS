@@ -12,8 +12,8 @@ export async function addUser(person: Person) {
     const graph = new Graph()
     const g = graph.traversal().withRemote(dc)
 
-    const  userVertex = g.V().has("person", "id", person.userId)
-    const user = await userVertex.hasNext() ? await userVertex.next() : await g.addV('person').property('id',person.userId).property('name', person.name).next()
+    const  userVertex = g.V(person.userId)
+    const user = await userVertex.hasNext() ? await userVertex.next() : await g.addV('person').property(gremlin.process.t.id, person.userId).property('name', person.name).next()
 
     const  cityVertex = g.V().has("city", "name", person.location)
     const city = await cityVertex.hasNext() ?  await cityVertex.next() : await g.addV("city").property("name", person.location).next();

@@ -26,10 +26,10 @@ export async function addReview(reviewInfo: Review) {
     const currentTotalReviews = await g.V(reviewInfo.restaurantId).in_("are_about").toList();
     console.log("currentTotalReviews: ", currentTotalReviews);
 
-    const updatedRestaurantRating = await g.V(reviewInfo.restaurantId).property("rating", ((previousRatingsOfRestaurant.value + parseInt(reviewInfo.rating)) / (currentTotalReviews.length + 1))).next()
+    const updatedRestaurantRating = await g.V(reviewInfo.restaurantId).property(gremlin.process.cardinality.single, "rating", ((previousRatingsOfRestaurant.value + parseInt(reviewInfo.rating)) / (currentTotalReviews.length + 1))).values("rating").next()
     console.log("updatedRestaurantRating: ", updatedRestaurantRating);
 
-    const userToReview = await g.addE("writes").from_(g.V().has("person", "id", reviewInfo.userId)).to(g.V(review.value.id)).next();
+    const userToReview = await g.addE("writes").from_(g.V(reviewInfo.userId)).to(g.V(review.value.id)).next();
     console.log("userToReviewEdge: ", userToReview);
 
     const reviewToRestaurant = await g.addE("are_about").from_(g.V(review.value.id)).to(g.V(reviewInfo.restaurantId)).next();

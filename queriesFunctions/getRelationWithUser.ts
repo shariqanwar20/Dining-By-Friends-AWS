@@ -13,11 +13,11 @@ export async function getRelationWithUser(userId: string, otherUserId: string) {
     const graph = new Graph()
     const g = graph.traversal().withRemote(dc)
 
-    const user = await g.V().has("person", "id", userId).properties().next()
+    const user = await g.V(userId).properties().next()
 
     console.log("userValue: ", user);
 
-    const data = await g.V().has("person", "id", userId).repeat(__.out("friends")).emit().until(__.has("person", "id", otherUserId)).toList()
+    const data = await g.V(userId).repeat(__.out("friends")).emit().until(__.hasId(otherUserId)).toList()
     
     console.log("getRelationWithUser: ", data);
 

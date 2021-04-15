@@ -13,7 +13,7 @@ export async function getFriendsOfFriends(userId: string) {
     const graph = new Graph()
     const g = graph.traversal().withRemote(dc)
 
-    const data = await g.V().has("id", userId).times(2).repeat(__.out("friends")).toList()
+    const data = await g.V(userId).times(2).repeat(__.out("friends")).toList()
     let friends = Array()
 
     let v: any;
@@ -23,8 +23,8 @@ export async function getFriendsOfFriends(userId: string) {
         acc[next.label] = next.value
         return acc
       }, {})
+      friend.id = v.id
       friends.push(friend)
-
       console.log("friends: ", friends);
     }
     dc.close()

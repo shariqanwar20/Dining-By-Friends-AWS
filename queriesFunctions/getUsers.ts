@@ -24,7 +24,7 @@ export const getUsers = async () => {
           acc[next.label] = next.value
           return acc
         }, {})
-        // user.id = v.id
+        user.id = v.id
         users.push(user)
       }
 

@@ -13,7 +13,7 @@ export async function getHighestRatedResturantWithCuisine(userId: string, cuisin
     const graph = new Graph()
     const g = graph.traversal().withRemote(dc)
 
-    const data = await g.V().has("person", "id", userId).out("lives_in").in_("located").filter(__.out("serves").has("cuisine", "name", cuisineName)).order().by("rating", gremlin.process.order.desc).limit(1).toList()
+    const data = await g.V(userId).out("lives_in").in_("located").filter(__.out("serves").has("cuisine", "name", cuisineName)).order().by("rating", gremlin.process.order.desc).limit(1).toList()
     
     console.log("Restaurants vertex: ", data);
     
