@@ -23,10 +23,8 @@ export async function rateReview(reviewInfo: RateReview) {
     const review = await g.V(reviewInfo.reviewId).property(gremlin.process.cardinality.single, "helpfulnessRating", newRatingValue).values("helpfulnessRating").next();
     console.log("reviewAfterHelpfulnessPropertyChanged: ", review);
 
-    const newRating = await g.V(reviewInfo.reviewId).values("helpfulnessRating").next()
-    console.log("helpfulnessRating: ", newRating);
-
-    const personToReview = await g.V(reviewInfo.userId).as("r").V(reviewInfo.reviewId).coalesce(__.inE("rates").where(__.outV().as("r")), __.addE("rates").from_("r")).next()
+    const d = new Date();
+    const personToReview = await g.V(reviewInfo.userId).as("r").V(reviewInfo.reviewId).coalesce(__.inE("rates").where(__.outV().as("r")), __.addE("rates").property("timeStamp", new Date()).from_("r")).next()
     console.log("personToReview: ", personToReview);
 
     dc.close()

@@ -14,8 +14,7 @@ export async function addReview(reviewInfo: Review) {
     const graph = new Graph()
     const g = graph.traversal().withRemote(dc)
 
-    const d = new Date();
-    const review = await g.addV('review').property('name', reviewInfo.text).property("rating", reviewInfo.rating).property("timeStamp", `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`).property("helpfulnessRating", 0).next()
+    const review = await g.addV('review').property('name', reviewInfo.text).property("rating", reviewInfo.rating).property("timeStamp", new Date()).property("helpfulnessRating", 0).next()
     
     console.log("Review Vertex: ", review);
     
@@ -43,7 +42,7 @@ export async function addReview(reviewInfo: Review) {
         id: review.value.id,
         text: reviewInfo.text,
         rating: reviewInfo.rating,
-        timeStamp: `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`,
+        timeStamp: new Date() + "",
         helpfulnessRating: 0
     }
 }

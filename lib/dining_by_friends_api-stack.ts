@@ -169,6 +169,31 @@ export class DiningByFriendsApiStack extends cdk.Stack {
       fieldName: "getHighestRatedResturantWithCuisine"
     })
 
+    queryLambdaDataSource.createResolver({
+      typeName: "Query",
+      fieldName: "getTopTenRestaurantsNearMe"
+    })
+
+    queryLambdaDataSource.createResolver({
+      typeName: "Query",
+      fieldName: "getRecentReviews"
+    })
+
+    queryLambdaDataSource.createResolver({
+      typeName: "Query",
+      fieldName: "getReviewdRatedRestaurantsByMyFriends"
+    })
+
+    queryLambdaDataSource.createResolver({
+      typeName: "Query",
+      fieldName: "getRestaurantsForMeBasedOnFriendsRatings"
+    })
+
+    queryLambdaDataSource.createResolver({
+      typeName: "Query",
+      fieldName: "getRecommendedRestaurants"
+    })
+
     const rule = new events.Rule(this, "DiningByFriendsMutationRule", {
       eventPattern: {
         source: ["appsync-add-user", "appsync-add-friend", "appsync-add-restaurant", "appsync-add-review", "appsync-rate-review"]

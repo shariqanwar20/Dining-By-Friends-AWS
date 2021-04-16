@@ -54,6 +54,10 @@ type Query {
   getRelationWithUser(userId: String!, otherUserId: String!) : String
   getHighestRatedResturantWithCuisine(userId: String!, cuisineName: String!) : Restaurant
   getTopTenRestaurantsNearMe(userId: String!) : [Restaurant]
+  getRecentReviews(restaurantId: String!) : [Review]
+  getRecommendedRestaurants(userId: String!) : [Restaurant]
+  getRestaurantsForMeBasedOnFriendsRatings(userId: String!) : [Restaurant]
+  getReviewdRatedRestaurantsByMyFriends(userId: String!, days: Int!) : [Restaurant]
 }
 
 type Mutation {
